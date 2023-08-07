@@ -150,6 +150,9 @@ app.post('/post', uploadMiddleware.single('file'), async (req, res) => {
     fs.renameSync(path, newPath);
 
     const { token } = req.cookies;
+   // Add this log to check the received token
+console.log('Received token:', token);
+
 
     // Verify the JWT token
     jwt.verify(token, secret, async (err, info) => {
