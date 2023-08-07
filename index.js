@@ -1,26 +1,68 @@
-const express = require('express')
-const cors   = require('cors')
-const { default: mongoose } = require('mongoose')
-const app = express()
-const User = require('./models/User')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-const cookieParser = require('cookie-parser')
-const multer = require('multer') 
-const fs = require('fs')
-const Post = require('./models/post')
+// const express = require('express')
+// const cors   = require('cors')
+// const { default: mongoose } = require('mongoose')
+// const app = express()
+// const User = require('./models/User')
+// const bcrypt = require('bcrypt')
+// const jwt = require('jsonwebtoken')
+// const cookieParser = require('cookie-parser')
+// const multer = require('multer') 
+// const fs = require('fs')
+// const Post = require('./models/post')
 
-const secret = 'ghsdajyfoikcnwerszxbvnmtyupozbo'
-const salt = bcrypt.genSaltSync(10)
-const uploadMiddleware = multer({ dest: 'uploads/' })
+// const secret = 'ghsdajyfoikcnwerszxbvnmtyupozbo'
+// const salt = bcrypt.genSaltSync(10)
+// const uploadMiddleware = multer({ dest: 'uploads/' })
 
-app.use(cors({credentials:true,origin:"https://gothbaat.vercel.app" ||'http://localhost:3000'}))
-app.use(express.json())
-app.use(cookieParser())
+// app.use(cors({credentials:true,origin:"https://gothbaat.vercel.app" ||'http://localhost:3000'}))
+// app.use(express.json())
+// app.use(cookieParser())
+// app.use('/uploads', express.static(__dirname + '/uploads'));
+// mongoose.connect('mongodb+srv://dhamendrasahu18:dhamendrsahu18@cluster0.7fq62od.mongodb.net/?retryWrites=true&w=majority').then(() => {
+//     console.log('mongo db connected successfully to your node project')
+// })
+
+const express = require('express');
+const cors = require('cors');
+const { default: mongoose } = require('mongoose');
+const app = express();
+const User = require('./models/User');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
+const multer = require('multer');
+const fs = require('fs');
+const Post = require('./models/post');
+
+const secret = 'ghsdajyfoikcnwerszxbvnmtyupozbo';
+const salt = bcrypt.genSaltSync(10);
+const uploadMiddleware = multer({ dest: 'uploads/' });
+
+const corsOptions = {
+  credentials: true,
+  origin: ['https://gothbaat.vercel.app', 'http://localhost:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept'],
+  exposedHeaders: ['set-cookie'],
+  sameSite: 'none',
+  preflightContinue: true,
+};
+
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
-mongoose.connect('mongodb+srv://dhamendrasahu18:dhamendrsahu18@cluster0.7fq62od.mongodb.net/?retryWrites=true&w=majority').then(() => {
-    console.log('mongo db connected successfully to your node project')
-})
+mongoose
+  .connect('mongodb+srv://dhamendrasahu18:dhamendrsahu18@cluster0.7fq62od.mongodb.net/?retryWrites=true&w=majority')
+  .then(() => {
+    console.log('mongo db connected successfully to your node project');
+  })
+  .catch((err) => {
+    console.error('Error connecting to MongoDB:', err);
+  });
+
+
+
 
 app.post('/register',async (req,res)=>{
    const {username,password} = req.body
