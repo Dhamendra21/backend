@@ -114,27 +114,71 @@ app.post('/logout',(req,res)=>{
     res.cookie('token','').json('ok')
 })
 
-app.post('/post',uploadMiddleware.single('file'),async(req,res)=>{
-    const {originalname,path} = req.file
+// handels post request of create post
+// app.post('/post',uploadMiddleware.single('file'),async(req,res)=>{
+//     const {originalname,path} = req.file
+//     const parts = originalname.split('.');
+//     const ext = parts[parts.length - 1];
+//     const newPath = path+'.'+ext;
+//     fs.renameSync(path,newPath)
+  
+//     const {token} = req.cookies
+//     jwt.verify(token, secret,{},async(err,info)=>{
+//         if (err)throw err
+//         const {title,summary,content} = req.body
+//         const postDoc =    await Post.create({
+//          title,
+//          summary,
+//          content,
+//          cover : newPath,
+//          author : info.id,
+//         })
+//         res.json(postDoc)
+//        })
+// })
+app.post('/post', uploadMiddleware.single('file'), async (req, res) => {
+  try {
+    // Check if a file was uploaded
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    const { originalname, path } = req.file;
     const parts = originalname.split('.');
     const ext = parts[parts.length - 1];
-    const newPath = path+'.'+ext;
-    fs.renameSync(path,newPath)
-  
-    const {token} = req.cookies
-    jwt.verify(token, secret,{},async(err,info)=>{
-        if (err)throw err
-        const {title,summary,content} = req.body
-        const postDoc =    await Post.create({
-         title,
-         summary,
-         content,
-         cover : newPath,
-         author : info.id,
-        })
-        res.json(postDoc)
-       })
-})
+    const newPath = path + '.' + ext;
+    fs.renameSync(path, newPath);
+
+    const { token } = req.cookies;
+
+    // Verify the JWT token
+    jwt.verify(token, secret, async (err, info) => {
+      if (err) {
+        return res.status(401).json({ error: 'Unauthorized user' });
+      }
+
+      // Extract user ID from the decoded token
+      const authorId = info.id;
+
+      const { title, summary, content } = req.body;
+      
+      // Create a new post with the given data
+      const postDoc = await Post.create({
+        title,
+        summary,
+        content,
+        cover: newPath,
+        author: authorId,
+      });
+
+      res.json(postDoc);
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 app.get('/post', async (req,res) => {
     res.json(
@@ -183,4 +227,3 @@ app.get('/post', async (req,res) => {
 app.listen(4000,()=>{
     console.log('port running')
 })
-// mongodb+srv://dhamendrasahu18:dhamendrasahu18@cluster0.7fq62od.mongodb.net/?retryWrites=true&w=majority
