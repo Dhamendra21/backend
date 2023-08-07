@@ -101,7 +101,7 @@ app.get('/profile',(req,res)=>{
   jwt.verify(token, secret, {}, (err, info) => {
     if (err) {
       console.error('JWT verification error:', err); // Add this log
-      res.status(401).json({ error: 'Unauthorized' });
+      res.status(401).json({ error: 'Unauthorized user' });
     } else {
       console.log('Decoded token:', info); // Add this log
       res.json(info);
