@@ -87,13 +87,28 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// app.get('/profile',(req,res)=>{
+//     const {token} = req.cookies
+//     jwt.verify(token, secret,{},(err,info)=>{
+//      if (err)throw err
+//      res.json(info)
+//     })
+// })
+
 app.get('/profile',(req,res)=>{
-    const {token} = req.cookies
-    jwt.verify(token, secret,{},(err,info)=>{
-     if (err)throw err
-     res.json(info)
-    })
-})
+  const {token} = req.cookies;
+  console.log('Received token:', token); // Add this log
+  jwt.verify(token, secret, {}, (err, info) => {
+    if (err) {
+      console.error('JWT verification error:', err); // Add this log
+      res.status(401).json({ error: 'Unauthorized' });
+    } else {
+      console.log('Decoded token:', info); // Add this log
+      res.json(info);
+    }
+  });
+});
+
 
 app.post('/logout',(req,res)=>{
     res.cookie('token','').json('ok')
