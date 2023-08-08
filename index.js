@@ -1,26 +1,3 @@
-// const express = require('express')
-// const cors   = require('cors')
-// const { default: mongoose } = require('mongoose')
-// const app = express()
-// const User = require('./models/User')
-// const bcrypt = require('bcrypt')
-// const jwt = require('jsonwebtoken')
-// const cookieParser = require('cookie-parser')
-// const multer = require('multer') 
-// const fs = require('fs')
-// const Post = require('./models/post')
-
-// const secret = 'ghsdajyfoikcnwerszxbvnmtyupozbo'
-// const salt = bcrypt.genSaltSync(10)
-// const uploadMiddleware = multer({ dest: 'uploads/' })
-
-// app.use(cors({credentials:true,origin:"https://gothbaat.vercel.app" ||'http://localhost:3000'}))
-// app.use(express.json())
-// app.use(cookieParser())
-// app.use('/uploads', express.static(__dirname + '/uploads'));
-// mongoose.connect('mongodb+srv://dhamendrasahu18:dhamendrsahu18@cluster0.7fq62od.mongodb.net/?retryWrites=true&w=majority').then(() => {
-//     console.log('mongo db connected successfully to your node project')
-// })
 
 const express = require('express');
 const cors = require('cors');
