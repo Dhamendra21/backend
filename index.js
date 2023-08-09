@@ -10,10 +10,9 @@ const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const fs = require('fs');
 const Post = require('./models/post');
-
-const secret = 'ghsdajyfoikcnwerszxbvnmtyupozbo';
+require('dotenv').config()
+const secret = process.env.SECRET_KEY;
 const salt = bcrypt.genSaltSync(10);
-const uploadMiddleware = multer({ dest: 'uploads/' });
 
 const corsOptions = {
   credentials: true,
@@ -30,7 +29,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
 mongoose
-  .connect('mongodb+srv://dhamendrasahu18:dhamendrsahu18@cluster0.7fq62od.mongodb.net/?retryWrites=true&w=majority')
+  .connect(process.env.MONGO_URL)
   .then(() => {
     console.log('mongo db connected successfully to your node project');
   })
@@ -155,6 +154,7 @@ app.post('/logout',(req,res)=>{
 //         res.json(postDoc)
 //        })
 // })
+const uploadMiddleware = multer({ dest: 'uploads/' });
 app.post('/post', uploadMiddleware.single('file'), async (req, res) => {
   try {
     // Check if a file was uploaded
