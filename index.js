@@ -16,7 +16,7 @@ const salt = bcrypt.genSaltSync(10);
 
 const corsOptions = {
   credentials: true,
-  origin: ['https://gothbaat.vercel.app', 'http://localhost:3000'],
+  origin: ['https://samachar-baba.vercel.app/', 'http://localhost:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept'],
   exposedHeaders: ['set-cookie'],
